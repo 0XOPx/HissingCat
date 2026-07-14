@@ -31,4 +31,4 @@ document.addEventListener("DOMContentLoaded", function() {
         parent.replaceChild(fragment, node);
     }
 });
- 
+
