@@ -1,0 +1,43 @@
+name: Minify JavaScript
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'hissingcat.js'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/checkout@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Terser
+        run: npm install -g terser
+
+      - name: Minify script
+        run: terser hissingcat.js -o hissingcat.min.js --mangle --compress
+
+      - name: Commit and push minified file
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@://github.com'
+          git add hissingcat.min.js
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto-minify hissingcat.js [skip ci]"
+            git push
+          fi
